@@ -26,7 +26,7 @@ class _ClockState extends State<Clock> {
 
       if (response.statusCode == 200) {
         // print(decodedResponse);
-        data = decodedResponse;
+        time = DateTime.parse(decodedResponse['datetime']);
       } else {
         print(decodedResponse["message"]);
       }
@@ -35,31 +35,27 @@ class _ClockState extends State<Clock> {
     }
   }
 
-  rebuild() async {
-    await Future.delayed(Duration(seconds: 1), () {
-      setState(() {
-        getTime();
-      });
+  DateTime time = DateTime.now();
+  Future<void> rebuild() async {
+    await Future.delayed(Duration(seconds: 1), () async {
+      time = time.add(Duration(seconds: 1));
+      setState(() {});
+      await rebuild();
     });
   }
 
   @override
   void initState() {
+    getTime();
     rebuild();
-    // TODO: implement initState
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    var datetimenow = data['datetime'] ?? now.toString();
-    var formatedDatefromapi = DateTime.parse(datetimenow);
-    DateTime formatedTimefromapi = DateTime.parse(data["datetime"]);
-
-    var date = DateFormat('EEE, MMM d').format(formatedDatefromapi);
-    // var timef = DateFormat('HH:mm:ss').format(formatedTimefromapi);
-    // DateTime time = DateTime.parse(timef);
-
+    DateFormat date = DateFormat(' EEEE , MMMM, d');
+    String formatedDate = date.format(time);
+    var amPm = time.hour >= 12 ? 'PM' : 'AM';
     return Scaffold(
       backgroundColor: Colors.grey,
       appBar: AppBar(
@@ -74,13 +70,10 @@ class _ClockState extends State<Clock> {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () async {
-              await getTime();
-              var formatedDate = DateTime.parse(data["datetime"]);
-              print(formatedDate);
-
-              var teest = DateFormat('EEE, MMM d').format(formatedDate);
-              print(teest);
+            onPressed: () {
+              setState(() {
+                getTime();
+              });
             },
             icon: Icon(Icons.replay_outlined),
           )
@@ -108,7 +101,7 @@ class _ClockState extends State<Clock> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(formatedTimefromapi.hour.toString(),
+                      Text(time.hour.toString(),
                           style: TextStyle(
                             fontSize: 90,
                             fontWeight: FontWeight.bold,
@@ -135,7 +128,7 @@ class _ClockState extends State<Clock> {
                         ],
                       ),
                       Text(
-                        formatedTimefromapi.minute.toString(),
+                        time.minute.toString(),
                         style: TextStyle(
                             fontSize: 90,
                             fontWeight: FontWeight.bold,
@@ -147,14 +140,14 @@ class _ClockState extends State<Clock> {
                             height: 8,
                           ),
                           Text(
-                            "Pm",
+                            amPm,
                             style: TextStyle(
                                 color: Color(0xffDFC445),
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: 15),
-                          Text(formatedTimefromapi.second.toString(),
+                          Text(time.second.toString(),
                               style: TextStyle(
                                   color: Colors.green,
                                   fontSize: 18,
@@ -164,7 +157,7 @@ class _ClockState extends State<Clock> {
                     ],
                   ),
                   Text(
-                    date.toString(),
+                    formatedDate,
                     style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
