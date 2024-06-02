@@ -57,15 +57,15 @@ class _ClockState extends State<Clock> {
     String formatedDate = date.format(time);
     var amPm = time.hour >= 12 ? 'PM' : 'AM';
     return Scaffold(
-      backgroundColor: Colors.grey,
+      backgroundColor: const Color.fromARGB(255, 207, 201, 201),
       appBar: AppBar(
-        backgroundColor: Colors.grey,
+        backgroundColor: Color.fromARGB(255, 206, 204, 204),
         title: Text(
           "Time",
           style: TextStyle(
               fontSize: 40,
               fontWeight: FontWeight.bold,
-              color: Color.fromARGB(255, 194, 194, 221)),
+              color: Colors.blueGrey),
         ),
         centerTitle: true,
         actions: [
@@ -82,6 +82,7 @@ class _ClockState extends State<Clock> {
       body: Column(children: [
         Divider(
           thickness: 4,
+          color: Colors.blueGrey,
         ),
         Padding(
           padding: const EdgeInsets.all(10.0),
@@ -89,8 +90,7 @@ class _ClockState extends State<Clock> {
             height: 180,
             width: double.infinity,
             decoration: BoxDecoration(
-                border: Border.all(
-                    width: 4, color: Color.fromARGB(255, 194, 194, 221)),
+                border: Border.all(width: 4, color: Colors.blueGrey),
                 borderRadius: BorderRadius.circular(10),
                 color: Color.fromARGB(255, 32, 37, 43)),
             child: Center(
@@ -166,6 +166,30 @@ class _ClockState extends State<Clock> {
                 ],
               ),
             ),
+          ),
+        ),
+        SizedBox(
+          height: 300,
+        ),
+        Text(
+          "Made By:",
+          style: TextStyle(
+            fontSize: 17,
+            color: Colors.grey,
+          ),
+        ),
+        Text(
+          "Name: Sumit Dhamala",
+          style: TextStyle(
+            fontSize: 17,
+            color: Colors.grey,
+          ),
+        ),
+        Text(
+          "Email: sumit11dhamala@gmail.com",
+          style: TextStyle(
+            fontSize: 17,
+            color: Colors.grey,
           ),
         ),
       ]),
